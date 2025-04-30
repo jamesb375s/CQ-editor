@@ -1,0 +1,31 @@
+import cadquery as cq
+from cadquery import exporters, Assembly
+
+hideAwayLift = Assembly()
+
+# Columns
+column_left = cq.Workplane("XY").box(12, 12, 144)
+column_right = cq.Workplane("XY").box(12, 12, 144).translate((120, 0, 0))
+
+# Arms
+arm_left_front = cq.Workplane("XY").box(48, 6, 4).translate((6, 6, 3))
+arm_left_rear = cq.Workplane("XY").box(48, 6, 4).translate((6, -54, 3))
+arm_right_front = cq.Workplane("XY").box(48, 6, 4).translate((126, 6, 3))
+arm_right_rear = cq.Workplane("XY").box(48, 6, 4).translate((126, -54, 3))
+
+# Cylinders (1.25 in radius = 2.5 in bore)
+cylinder_left = cq.Workplane("XY").circle(1.25).extrude(78).translate((6, 6, 3))
+cylinder_right = cq.Workplane("XY").circle(1.25).extrude(78).translate((126, 6, 3))
+
+# Add parts to assembly
+hideAwayLift.add(column_left, name="ColumnLeft")
+hideAwayLift.add(column_right, name="ColumnRight")
+hideAwayLift.add(arm_left_front, name="ArmLeftFront")
+hideAwayLift.add(arm_left_rear, name="ArmLeftRear")
+hideAwayLift.add(arm_right_front, name="ArmRightFront")
+hideAwayLift.add(arm_right_rear, name="ArmRightRear")
+hideAwayLift.add(cylinder_left, name="CylinderLeft")
+hideAwayLift.add(cylinder_right, name="CylinderRight")
+
+# Export STEP file
+exporters.export(hideAwayLift, 'hideaway_two_post_lift_assembly.step')
